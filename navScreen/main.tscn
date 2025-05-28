@@ -1,0 +1,90 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwe3n5qr75jga"]
+
+[ext_resource type="Script" uid="uid://b45e1su0we1e6" path="res://navScreen/main.gd" id="1_fm4fe"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fm4fe")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0392157, 0.0392157, 0.0588235, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 17
+
+[node name="Label" type="Label" parent="ColorRect/CenterContainer/VBoxContainer"]
+modulate = Color(0.787759, 0.787759, 0.787759, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "CODE MINE"
+uppercase = true
+
+[node name="Button" type="Button" parent="ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "▶ Start
+"
+expand_icon = true
+
+[node name="Button3" type="Button" parent="ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "⚙ Settings"
+
+[node name="Button4" type="Button" parent="ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "★ Daily Challenge"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(0.964742, 0.964742, 0.964742, 1)
+layout_mode = 2
+text = "Theme "
+
+[node name="OptionButton" type="OptionButton" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "cyber grid"
+popup/item_0/id = 0
+popup/item_1/text = "nature core"
+popup/item_1/id = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "v 1.0"
+
+[node name="Button" type="Button" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "feedback
+"
+
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button3" to="." method="_on_settings_pressed"]

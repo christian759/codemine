@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://34ix64tntpsd"]
+
+[ext_resource type="Script" uid="uid://ce07vcthgo5d5" path="res://navScreen/game_mode.gd" id="1_st77u"]
+
+[node name="GameMode" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_st77u")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0392157, 0.0392157, 0.0588235, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -64.0
+offset_right = 48.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Game Mode"
+
+[node name="Button" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "classic"
+
+[node name="Button2" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "time attack"
+
+[node name="Button3" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "custom"
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/Button" to="." method="_on_classic_pressed"]
