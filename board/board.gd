@@ -3,25 +3,30 @@ extends Node2D
 const WIDTH := 8
 const HEIGHT := 8
 const BOMB_COUNT := 10
-const TILE_SIZE := 32 # or 64, match your button size
-const HORIZONTAL_TILE_MARGIN := 20 # Adjust this value for more/less spacing
-const VERTICAL_TILE_MARGIN := 20 # Adjust this value for more/less spacing
+const TILE_SIZE := 32
+const HORIZONTAL_TILE_MARGIN := 20
+const VERTICAL_TILE_MARGIN := 20
 
-@onready var tile_scene := preload("res://board/TileButton.tscn")
+@onready var tile_scene = preload("res://board/TileButton.tscn")
 
-var tiles := []
-var tile_nodes := []
+var tiles = []
+var tile_nodes = []
+
+@onready var game_over_popup: PopupPanel = $PopupPanel
+@onready var restart_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/RestartButton
+@onready var back_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/BackButton
 
 func _ready():
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
-	_generate_board_data() # Only once!
+	_generate_board_data()
 	_on_viewport_size_changed()
+	restart_button.pressed.connect(_on_restart_pressed)
+	back_button.pressed.connect(_on_back_pressed)
 
 func _on_viewport_size_changed():
 	clear_grid()
 	generate_grid()
 
-# Only generate bombs and neighbors ONCE
 func _generate_board_data():
 	tiles.clear()
 	for y in HEIGHT:
@@ -58,11 +63,10 @@ func clear_grid():
 				tile.queue_free()
 	tile_nodes.clear()
 
-# Only recreate the BUTTONS, not the board data
 func generate_grid():
 	tile_nodes.clear()
 	var grid_width = WIDTH * (TILE_SIZE + HORIZONTAL_TILE_MARGIN) - HORIZONTAL_TILE_MARGIN
-	var grid_height = HEIGHT * (TILE_SIZE + VERTICAL_TILE_MARGIN ) - VERTICAL_TILE_MARGIN 
+	var grid_height = HEIGHT * (TILE_SIZE + VERTICAL_TILE_MARGIN) - VERTICAL_TILE_MARGIN
 	var offset = Vector2(
 		(self.get_viewport_rect().size.x - grid_width) / 2,
 		(self.get_viewport_rect().size.y - grid_height) / 2
@@ -76,7 +80,7 @@ func generate_grid():
 			tile.grid_manager = self
 			tile.position = Vector2(
 				x * (TILE_SIZE + HORIZONTAL_TILE_MARGIN),
-				y * (TILE_SIZE + VERTICAL_TILE_MARGIN )
+				y * (TILE_SIZE + VERTICAL_TILE_MARGIN)
 			) + offset
 			# Restore revealed state
 			var data = tiles[y][x]
@@ -92,7 +96,6 @@ func generate_grid():
 			add_child(tile)
 		tile_nodes.append(node_row)
 
-# Minesweeper-style recursive reveal
 func reveal_tile(x, y):
 	var data = tiles[y][x]
 	var button = tile_nodes[y][x]
@@ -105,20 +108,35 @@ func reveal_tile(x, y):
 	if data.is_bomb:
 		button.text = "💣"
 		button.disabled = true
-		# TODO: game over logic
+		_disable_all_tiles()
+		_show_game_over_popup()
 		return
 
 	if data.neighbor_bombs > 0:
 		button.text = str(data.neighbor_bombs)
 	else:
 		button.text = ""
-		# Auto-reveal neighbors (3x3 area)
 		for ny in range(y - 1, y + 2):
 			for nx in range(x - 1, x + 2):
 				if is_valid(nx, ny) and not (nx == x and ny == y):
 					reveal_tile(nx, ny)
-
 	button.disabled = true
+
+func _disable_all_tiles():
+	for row in tile_nodes:
+		for tile in row:
+			tile.disabled = true
 
 func is_valid(x, y):
 	return x >= 0 and x < WIDTH and y >= 0 and y < HEIGHT
+
+func _show_game_over_popup():
+	game_over_popup.popup_centered()
+
+func _on_restart_pressed():
+	game_over_popup.hide()
+	_generate_board_data()
+	_on_viewport_size_changed()
+
+func _on_back_pressed():
+	get_tree().change_scene_to_file("res://navScreen/gameMode.tscn")
