@@ -108,6 +108,7 @@ func reveal_tile(x, y):
 	if data.is_bomb:
 		button.text = "💣"
 		button.disabled = true
+		_reveal_all_tiles()
 		_disable_all_tiles()
 		_show_game_over_popup()
 		return
@@ -121,6 +122,18 @@ func reveal_tile(x, y):
 				if is_valid(nx, ny) and not (nx == x and ny == y):
 					reveal_tile(nx, ny)
 	button.disabled = true
+
+func _reveal_all_tiles():
+	for row in tile_nodes:
+		for tile in row:
+			var data = tiles[tile.y][tile.x]
+			if data.is_bomb:
+				tile.text = "💣"
+			elif data.neighbor_bombs > 0:
+				tile.text = str(data.neighbor_bombs)
+			else:
+				tile.text = ""
+			tile.disabled = true
 
 func _disable_all_tiles():
 	for row in tile_nodes:
