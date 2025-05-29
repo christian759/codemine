@@ -13,102 +13,112 @@ var tiles := []
 var tile_nodes := []
 
 func _ready():
-	generate_grid()
-	get_viewport().size_changed.connect(_on_viewport_size_changed)
+    get_viewport().size_changed.connect(_on_viewport_size_changed)
+    _generate_board_data() # Only once!
+    _on_viewport_size_changed()
 
 func _on_viewport_size_changed():
-	clear_grid()
-	generate_grid()
+    clear_grid()
+    generate_grid()
+
+# Only generate bombs and neighbors ONCE
+func _generate_board_data():
+    tiles.clear()
+    for y in HEIGHT:
+        var row = []
+        for x in WIDTH:
+            row.append(MineTileData.new())
+        tiles.append(row)
+
+    # Place bombs randomly
+    var placed := 0
+    while placed < BOMB_COUNT:
+        var rx = randi() % WIDTH
+        var ry = randi() % HEIGHT
+        if not tiles[ry][rx].is_bomb:
+            tiles[ry][rx].is_bomb = true
+            placed += 1
+
+    # Calculate neighbors
+    for y in HEIGHT:
+        for x in WIDTH:
+            if tiles[y][x].is_bomb:
+                continue
+            var count = 0
+            for ny in range(y - 1, y + 2):
+                for nx in range(x - 1, x + 2):
+                    if is_valid(nx, ny) and tiles[ny][nx].is_bomb:
+                        count += 1
+            tiles[y][x].neighbor_bombs = count
 
 func clear_grid():
-	for row in tile_nodes:
-		for tile in row:
-			if tile:
-				tile.queue_free()
-	tile_nodes.clear()
+    for row in tile_nodes:
+        for tile in row:
+            if tile:
+                tile.queue_free()
+    tile_nodes.clear()
 
+# Only recreate the BUTTONS, not the board data
 func generate_grid():
-	# Step 1: Create tile data
-	tiles.clear()
-	tile_nodes.clear()
-	for y in HEIGHT:
-		var row = []
-		var node_row = []
-		for x in WIDTH:
-			row.append(MineTileData.new())
-			node_row.append(null)
-		tiles.append(row)
-		tile_nodes.append(node_row) # <-- Move this line here
-	
-	# Step 2: Place bombs randomly
-	var placed := 0
-	while placed < BOMB_COUNT:
-		var rx = randi() % WIDTH
-		var ry = randi() % HEIGHT
-		if not tiles[ry][rx].is_bomb:
-			tiles[ry][rx].is_bomb = true
-			placed += 1
+    tile_nodes.clear()
+    var grid_width = WIDTH * (TILE_SIZE + HORIZONTAL_TILE_MARGIN) - HORIZONTAL_TILE_MARGIN
+    var grid_height = HEIGHT * (TILE_SIZE + VERTICAL_TILE_MARGIN ) - VERTICAL_TILE_MARGIN 
+    var offset = Vector2(
+        (self.get_viewport_rect().size.x - grid_width) / 2,
+        (self.get_viewport_rect().size.y - grid_height) / 2
+    )
+    for y in HEIGHT:
+        var node_row = []
+        for x in WIDTH:
+            var tile = tile_scene.instantiate()
+            tile.x = x
+            tile.y = y
+            tile.grid_manager = self
+            tile.position = Vector2(
+                x * (TILE_SIZE + HORIZONTAL_TILE_MARGIN),
+                y * (TILE_SIZE + VERTICAL_TILE_MARGIN )
+            ) + offset
+            # Restore revealed state
+            var data = tiles[y][x]
+            if data.is_revealed:
+                if data.is_bomb:
+                    tile.text = "💣"
+                elif data.neighbor_bombs > 0:
+                    tile.text = str(data.neighbor_bombs)
+                else:
+                    tile.text = ""
+                tile.disabled = true
+            node_row.append(tile)
+            add_child(tile)
+        tile_nodes.append(node_row)
 
-	# Step 3: Calculate neighbors
-	for y in HEIGHT:
-		for x in WIDTH:
-			if tiles[y][x].is_bomb:
-				continue
-			var count = 0
-			for ny in range(y - 1, y + 2):
-				for nx in range(x - 1, x + 2):
-					if is_valid(nx, ny) and tiles[ny][nx].is_bomb:
-						count += 1
-			tiles[y][x].neighbor_bombs = count
+# Minesweeper-style recursive reveal
+func reveal_tile(x, y):
+    var data = tiles[y][x]
+    var button = tile_nodes[y][x]
 
-	# Calculate offset to center the grid (include margins)
-	var grid_width = WIDTH * (TILE_SIZE + HORIZONTAL_TILE_MARGIN) - HORIZONTAL_TILE_MARGIN
-	var grid_height = HEIGHT * (TILE_SIZE + VERTICAL_TILE_MARGIN ) - VERTICAL_TILE_MARGIN 
-	var offset = Vector2(
-		(self.get_viewport_rect().size.x - grid_width) / 2,
-		(self.get_viewport_rect().size.y - grid_height) / 2
-	)
+    if data.is_revealed or data.is_flagged:
+        return
 
-	# Step 4: Instantiate buttons
-	for y in HEIGHT:
-		for x in WIDTH:
-			var tile = tile_scene.instantiate()
-			tile.x = x
-			tile.y = y
-			tile.grid_manager = self
-			tile.position = Vector2(
-				x * (TILE_SIZE + HORIZONTAL_TILE_MARGIN),
-				y * (TILE_SIZE + VERTICAL_TILE_MARGIN )
-			) + offset
-			add_child(tile)
-			tile_nodes[y][x] = tile
+    data.is_revealed = true
+
+    if data.is_bomb:
+        button.text = "💣"
+        button.disabled = true
+        # TODO: game over logic
+        return
+
+    if data.neighbor_bombs > 0:
+        button.text = str(data.neighbor_bombs)
+    else:
+        button.text = ""
+        # Auto-reveal neighbors (3x3 area)
+        for ny in range(y - 1, y + 2):
+            for nx in range(x - 1, x + 2):
+                if is_valid(nx, ny) and not (nx == x and ny == y):
+                    reveal_tile(nx, ny)
+
+    button.disabled = true
 
 func is_valid(x, y):
-	return x >= 0 and y >= 0 and x < WIDTH and y < HEIGHT
-
-func reveal_tile(x, y):
-	var data = tiles[y][x]
-	var button = tile_nodes[y][x]
-
-	if data.is_revealed or data.is_flagged:
-		return
-
-	data.is_revealed = true
-
-	if data.is_bomb:
-		button.text = "💣"
-		button.disabled = true
-		# TODO: game over logic
-		return
-
-	if data.neighbor_bombs > 0:
-		button.text = str(data.neighbor_bombs)
-	else:
-		button.text = ""
-		# Auto-reveal neighbors
-		for ny in range(y - 1, y + 1):
-			for nx in range(x - 1, x + 1):
-				if is_valid(nx, ny):
-					reveal_tile(nx, ny)
-
-	button.disabled = true
+    return x >= 0 and x < WIDTH and y >= 0 and y < HEIGHT
