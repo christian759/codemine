@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 const WIDTH := 8
 const HEIGHT := 8
@@ -12,6 +12,7 @@ const VERTICAL_TILE_MARGIN := 20
 var tiles = []
 var tile_nodes = []
 
+@onready var bgColor: ColorRect = $ColorRect
 @onready var game_over_popup: PopupPanel = $PopupPanel
 @onready var restart_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/RestartButton
 @onready var back_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/BackButton
@@ -67,9 +68,10 @@ func generate_grid():
 	tile_nodes.clear()
 	var grid_width = WIDTH * (TILE_SIZE + HORIZONTAL_TILE_MARGIN) - HORIZONTAL_TILE_MARGIN
 	var grid_height = HEIGHT * (TILE_SIZE + VERTICAL_TILE_MARGIN) - VERTICAL_TILE_MARGIN
+	var viewport_size = get_viewport().size
 	var offset = Vector2(
-		(self.get_viewport_rect().size.x - grid_width) / 2,
-		(self.get_viewport_rect().size.y - grid_height) / 2
+		(viewport_size.x - grid_width) / 2,
+		(viewport_size.y - grid_height) / 2
 	)
 	for y in HEIGHT:
 		var node_row = []
