@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf1ak3gum6bls"]
+[gd_scene load_steps=4 format=3 uid="uid://bf1ak3gum6bls"]
 
 [ext_resource type="Script" uid="uid://c2janl8vmmvb4" path="res://board/board.gd" id="1_5c38k"]
+[ext_resource type="Texture2D" uid="uid://dtj5v2jpb88tr" path="res://icon/click.svg" id="2_k4dee"]
+[ext_resource type="Texture2D" uid="uid://djeahs7bc6aok" path="res://icon/flat.png" id="3_vj8kq"]
 
 [node name="Board" type="Node"]
 script = ExtResource("1_5c38k")
@@ -35,3 +37,36 @@ text = "RESTART"
 [node name="BackButton" type="Button" parent="PopupPanel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "BACK"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -92.0
+offset_top = -144.0
+offset_right = 92.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("2_k4dee")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("3_vj8kq")
+icon_alignment = 1
+expand_icon = true
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
