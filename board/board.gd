@@ -18,10 +18,10 @@ var tile_nodes = []
 @onready var restart_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/RestartButton
 @onready var back_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/BackButton
 
-var top_node = null
+var bottom_node = null
 var pick_mode := true # true = pick/reveal, false = flag
 
-# References to the top bar buttons
+# References to the bottom bar buttons
 var pick_button: Button
 var flag_button: Button
 
@@ -35,19 +35,19 @@ func _ready():
 func _on_viewport_size_changed():
     clear_grid()
     generate_grid()
-    _adding_top_node()
+    _adding_bottom_bar()
+
+func get_bottom_bar_height():
+    var viewport_size = get_viewport().size
+    return max(viewport_size.y * 0.1, 48)
 
 func get_dynamic_tile_size():
     var viewport_size = get_viewport().size
-    var top_bar_height = get_top_bar_height()
-    var available_height = viewport_size.y - top_bar_height - 16 # 16px padding below top bar
+    var bottom_bar_height = get_bottom_bar_height()
+    var available_height = viewport_size.y - bottom_bar_height - 16 # 16px padding above bottom bar
     var tile_width = (viewport_size.x - (WIDTH - 1) * HORIZONTAL_TILE_MARGIN) / WIDTH
     var tile_height = (available_height - (HEIGHT - 1) * VERTICAL_TILE_MARGIN) / HEIGHT
     return min(tile_width, tile_height, MAX_TILE_SIZE)
-
-func get_top_bar_height():
-    var viewport_size = get_viewport().size
-    return max(viewport_size.y * 0.1, 48)
 
 func _generate_board_data():
     tiles.clear()
@@ -91,9 +91,10 @@ func generate_grid():
     var grid_width = WIDTH * tile_size + (WIDTH - 1) * HORIZONTAL_TILE_MARGIN
     var grid_height = HEIGHT * tile_size + (HEIGHT - 1) * VERTICAL_TILE_MARGIN
     var viewport_size = get_viewport().size
+    var bottom_bar_height = get_bottom_bar_height()
     var offset = Vector2(
         (viewport_size.x - grid_width) / 2,
-        get_top_bar_height() + 8 + ((viewport_size.y - get_top_bar_height() - grid_height) / 2) # 8px gap below top bar
+        ((viewport_size.y - bottom_bar_height - grid_height) / 2)
     )
     for y in HEIGHT:
         var node_row = []
@@ -125,50 +126,47 @@ func generate_grid():
             add_child(tile)
         tile_nodes.append(node_row)
 
-func _adding_top_node():
-    # Remove previous top node if it exists
-    if top_node and is_instance_valid(top_node):
-        top_node.queue_free()
-        top_node = null
+func _adding_bottom_bar():
+    # Remove previous bottom node if it exists
+    if bottom_node and is_instance_valid(bottom_node):
+        bottom_node.queue_free()
+        bottom_node = null
 
     var viewport_size = get_viewport().size
-    var tile_size = get_dynamic_tile_size()
-    var grid_width = WIDTH * tile_size + (WIDTH - 1) * HORIZONTAL_TILE_MARGIN
-    var grid_height = HEIGHT * tile_size + (HEIGHT - 1) * VERTICAL_TILE_MARGIN
-    var grid_offset_x = (viewport_size.x - grid_width) / 2
-    var grid_offset_y = get_top_bar_height() + 8 + ((viewport_size.y - get_top_bar_height() - grid_height) / 2)
+    bottom_node = bottom_scene.instantiate()
 
-    var vertical_spacing = 24 # Space between grid and panel
-
-    top_node = bottom_scene.instantiate()
-
-    if top_node is Control:
-        # Center horizontally, place below grid
-        top_node.position = Vector2(
-            grid_offset_x + (grid_width - top_node.size.x) / 2,
-            grid_offset_y + grid_height + vertical_spacing
-        )
+    if bottom_node is Control:
+        # Make it a true bottom bar
+        bottom_node.anchor_left = 0
+        bottom_node.anchor_right = 1
+        bottom_node.anchor_top = 1
+        bottom_node.anchor_bottom = 1
+        bottom_node.offset_left = 0
+        bottom_node.offset_right = 0
+        bottom_node.offset_top = -get_bottom_bar_height()
+        bottom_node.offset_bottom = 0
+        bottom_node.custom_minimum_size = Vector2(viewport_size.x, get_bottom_bar_height())
 
         # Get references to the buttons
-        pick_button = top_node.get_node("VBoxContainer/HBoxContainer/clickButton")
-        flag_button = top_node.get_node("VBoxContainer/HBoxContainer/flagButton")
+        pick_button = bottom_node.get_node("VBoxContainer/HBoxContainer/clickButton")
+        flag_button = bottom_node.get_node("VBoxContainer/HBoxContainer/flagButton")
 
         pick_button.pressed.connect(_on_pick_button_pressed)
         flag_button.pressed.connect(_on_flag_button_pressed)
 
-        _update_top_bar_buttons()
+        _update_bottom_bar_buttons()
 
-    add_child(top_node)
+    add_child(bottom_node)
 
 func _on_pick_button_pressed():
     pick_mode = true
-    _update_top_bar_buttons()
+    _update_bottom_bar_buttons()
 
 func _on_flag_button_pressed():
     pick_mode = false
-    _update_top_bar_buttons()
+    _update_bottom_bar_buttons()
 
-func _update_top_bar_buttons():
+func _update_bottom_bar_buttons():
     if pick_button:
         pick_button.disabled = pick_mode
     if flag_button:
@@ -207,6 +205,7 @@ func _reveal_tile_logic(x, y):
                 if is_valid(nx, ny) and not (nx == x and ny == y):
                     _reveal_tile_logic(nx, ny)
     button.disabled = true
+    _check_win_condition()
 
 func _flag_tile_logic(x, y):
     var data = tiles[y][x]
@@ -217,6 +216,21 @@ func _flag_tile_logic(x, y):
 
     data.is_flagged = not data.is_flagged
     button.text = "🚩" if data.is_flagged else ""
+    _check_win_condition()
+
+func _check_win_condition():
+    for y in HEIGHT:
+        for x in WIDTH:
+            var data = tiles[y][x]
+            if not data.is_bomb and not data.is_revealed:
+                return # Not yet won
+    _show_win_popup()
+
+func _show_win_popup():
+    var label = game_over_popup.get_node("VBoxContainer/Label")
+    if label:
+        label.text = "You Win!"
+    game_over_popup.popup_centered()
 
 func _reveal_all_tiles():
     for row in tile_nodes:
@@ -239,6 +253,9 @@ func is_valid(x, y):
     return x >= 0 and x < WIDTH and y >= 0 and y < HEIGHT
 
 func _show_game_over_popup():
+    var label = game_over_popup.get_node("VBoxContainer/Label")
+    if label:
+        label.text = "Game Over"
     game_over_popup.popup_centered()
 
 func _on_restart_pressed():
