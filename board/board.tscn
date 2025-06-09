@@ -38,10 +38,37 @@ layout_mode = 2
 text = "BACK"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_right = 5.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="tileBoard" type="Node" parent="VBoxContainer"]
+[node name="boardContent" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TileLayer" type="GridContainer" parent="VBoxContainer/boardContent"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
 
 [node name="BottomNode" parent="VBoxContainer" instance=ExtResource("2_k4dee")]
 layout_mode = 2
