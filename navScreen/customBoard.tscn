@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://7tvyppbkwwyd"]
+
+[ext_resource type="Script" uid="uid://m4nvui0ecluw" path="res://navScreen/custom_board.gd" id="1_o6ex0"]
+
+[node name="CustomBoard" type="Node"]
+script = ExtResource("1_o6ex0")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0392157, 0.0392157, 0.0588235, 1)
+
+[node name="VSplitContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -42.0
+offset_right = 104.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 17
+
+[node name="Label" type="Label" parent="ColorRect/VSplitContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "CUSTOM MINE MAP"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="ColorRect/VSplitContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="Label" type="Label" parent="ColorRect/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "size"
+
+[node name="OptionButton" type="OptionButton" parent="ColorRect/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="HSplitContainer2" type="HSplitContainer" parent="ColorRect/VSplitContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VSplitContainer/HSplitContainer2"]
+layout_mode = 2
+text = "number of bomb"
+
+[node name="OptionButton" type="OptionButton" parent="ColorRect/VSplitContainer/HSplitContainer2"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ColorRect/VSplitContainer"]
+layout_mode = 2
+text = "Start"
+
+[connection signal="pressed" from="ColorRect/VSplitContainer/Button" to="." method="_on_button_pressed"]

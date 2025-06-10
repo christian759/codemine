@@ -6,9 +6,6 @@
 [node name="Board" instance=ExtResource("1_1rl6s")]
 script = ExtResource("2_massj")
 
-[node name="VBoxContainer" parent="PopupPanel" index="1"]
-offset_right = 96.0
-
 [node name="Timer" type="Timer" parent="ColorRect" index="0"]
 
 [node name="Label" type="Label" parent="ColorRect" index="1"]
