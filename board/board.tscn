@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bf1ak3gum6bls"]
+[gd_scene load_steps=2 format=3 uid="uid://bf1ak3gum6bls"]
 
 [ext_resource type="Script" uid="uid://c2janl8vmmvb4" path="res://board/board.gd" id="1_5c38k"]
-[ext_resource type="Texture2D" uid="uid://dtj5v2jpb88tr" path="res://icon/click.svg" id="2_vj8kq"]
-[ext_resource type="Texture2D" uid="uid://djeahs7bc6aok" path="res://icon/flat.png" id="3_eiwly"]
 
 [node name="Board" type="Node"]
 script = ExtResource("1_5c38k")
@@ -77,26 +75,3 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
-
-[node name="HSeparator" type="HSeparator" parent="ColorRect/CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(9, 100)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/CenterContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="clickButton" type="Button" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-icon = ExtResource("2_vj8kq")
-icon_alignment = 1
-expand_icon = true
-
-[node name="flagButton" type="Button" parent="ColorRect/CenterContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-icon = ExtResource("3_eiwly")
-icon_alignment = 1
-expand_icon = true
-
-[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/HBoxContainer/clickButton" to="." method="_on_pick_button_pressed"]

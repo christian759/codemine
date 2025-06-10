@@ -53,3 +53,5 @@ layout_mode = 2
 text = "custom"
 
 [connection signal="pressed" from="ColorRect/VBoxContainer/Button" to="." method="_on_classic_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/Button3" to="." method="_on_button_3_pressed"]

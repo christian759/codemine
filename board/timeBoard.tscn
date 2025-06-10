@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://4cjhchy2rfqf"]
+
+[ext_resource type="PackedScene" uid="uid://bf1ak3gum6bls" path="res://board/board.tscn" id="1_1rl6s"]
+[ext_resource type="Script" uid="uid://b36uhiaxor4qo" path="res://board/time_board.gd" id="2_massj"]
+
+[node name="Board" instance=ExtResource("1_1rl6s")]
+script = ExtResource("2_massj")
+
+[node name="VBoxContainer" parent="PopupPanel" index="1"]
+offset_right = 96.0
+
+[node name="Timer" type="Timer" parent="ColorRect" index="0"]
+
+[node name="Label" type="Label" parent="ColorRect" index="1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -0.5
+offset_right = 0.5
+offset_bottom = 23.0
+grow_horizontal = 2
