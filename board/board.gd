@@ -17,9 +17,8 @@ var tile_nodes = []
 @onready var game_over_popup: PopupPanel = $PopupPanel
 @onready var restart_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/RestartButton
 @onready var back_button: Button = $PopupPanel/VBoxContainer/HBoxContainer/BackButton
-@onready var board_content: Control = $VBoxContainer/boardContent
-@onready var tile_layer: GridContainer = $VBoxContainer/boardContent/TileLayer
-@onready var bottom_node: Control = $VBoxContainer/BottomNode
+@onready var board_content: Control = $ColorRect/CenterContainer/VBoxContainer/VBoxContainer2/boardContent
+@onready var tile_layer: GridContainer = $ColorRect/CenterContainer/VBoxContainer/VBoxContainer2/boardContent/TileLayer
 
 var pick_mode := true
 
@@ -36,7 +35,6 @@ func _ready():
 func _on_viewport_size_changed():
 	clear_grid()
 	generate_grid()
-	_adding_bottom_bar()
 
 func get_bottom_bar_height():
 	var viewport_size = get_viewport().size
@@ -122,19 +120,6 @@ func generate_grid():
 			if tile_layer:
 				tile_layer.add_child(tile)
 		tile_nodes.append(node_row)
-
-func _adding_bottom_bar():
-	var viewport_size = get_viewport().size
-	if bottom_node is Control:
-		bottom_node.custom_minimum_size = Vector2(viewport_size.x, get_bottom_bar_height())
-
-		pick_button = bottom_node.get_node("VBoxContainer/HBoxContainer/clickButton")
-		flag_button = bottom_node.get_node("VBoxContainer/HBoxContainer/flagButton")
-
-		pick_button.pressed.connect(_on_pick_button_pressed)
-		flag_button.pressed.connect(_on_flag_button_pressed)
-
-		_update_bottom_bar_buttons()
 
 func _on_pick_button_pressed():
 	pick_mode = true

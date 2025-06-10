@@ -3,12 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://dtj5v2jpb88tr" path="res://icon/click.svg" id="1_pfvjn"]
 [ext_resource type="Texture2D" uid="uid://djeahs7bc6aok" path="res://icon/flat.png" id="2_v28qj"]
 
-[node name="BottomNode" type="Control"]
-layout_mode = 3
-anchors_preset = 0
+[node name="BottomNode" type="Node"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
