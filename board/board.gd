@@ -140,7 +140,7 @@ func _adding_top_node():
 	if top_node is Control:
 		top_node.position = Vector2(
 			grid_offset_x + (grid_width - top_node.size.x) / 2,
-			grid_offset_y + grid_height + 24
+			grid_offset_y + grid_height + 200
 		)
 
 		pick_button = top_node.get_node("VBoxContainer/HBoxContainer/clickButton")

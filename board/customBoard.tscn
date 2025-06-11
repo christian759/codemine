@@ -1,11 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfe3oejgm1ph4"]
+[gd_scene load_steps=3 format=3 uid="uid://dwphq5ulgkffo"]
 
-[ext_resource type="Script" uid="uid://b8otwjnjmgcw7" path="res://board/custom_board.gd" id="1_742qm"]
+[ext_resource type="PackedScene" uid="uid://bf1ak3gum6bls" path="res://board/board.tscn" id="1_742qm"]
+[ext_resource type="Script" uid="uid://b8otwjnjmgcw7" path="res://board/custom_board.gd" id="2_bhm74"]
 
-[node name="CustomBoard" type="Node2D"]
-script = ExtResource("1_742qm")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-color = Color(0.0392157, 0.0392157, 0.0588235, 1)
+[node name="Board" instance=ExtResource("1_742qm")]
+script = ExtResource("2_bhm74")

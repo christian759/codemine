@@ -1,4 +1,4 @@
 extends Node
 
-var gridSize: 	String = ""
-var bombNumber: String = ""
+var gridSize: 	String = "8"
+var bombNumber: String = "10"
