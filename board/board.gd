@@ -1,12 +1,12 @@
 extends Node
 
-const WIDTH := 8
-const HEIGHT := 8
-const BOMB_COUNT := 10
-const HORIZONTAL_TILE_MARGIN := 4
-const VERTICAL_TILE_MARGIN := 4
-const MAX_TILE_SIZE := 48
-const MIN_TILE_SIZE := 24
+@export var WIDTH := 8
+@export var HEIGHT := 8
+@export var BOMB_COUNT := 10
+@export var HORIZONTAL_TILE_MARGIN := 4
+@export var VERTICAL_TILE_MARGIN := 4
+@export var MAX_TILE_SIZE := 48
+@export var MIN_TILE_SIZE := 24
 
 @onready var tile_scene = preload("res://board/TileButton.tscn")
 @onready var bottom_scene = preload("res://board/bottom/BottomNode.tscn")

@@ -9,7 +9,7 @@ func _ready():
 		option2.add_item(str(i))
 		
 	# default selections
-	option1.select(9)
+	option1.select(7)
 	option2.select(9)
 	
 	
@@ -18,4 +18,4 @@ func _on_button_pressed() -> void:
 	var bombnumber = option2.get_item_text(option2.get_selected())
 	Global.gridSize = gridsize
 	Global.bombNumber = bombnumber
-	get_tree().change_scene_to_file("res://navScreen/customBoard.tscn")
+	get_tree().change_scene_to_file("res://board/customBoard.tscn")

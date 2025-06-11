@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfe3oejgm1ph4"]
+
+[ext_resource type="Script" uid="uid://b8otwjnjmgcw7" path="res://board/custom_board.gd" id="1_742qm"]
+
+[node name="CustomBoard" type="Node2D"]
+script = ExtResource("1_742qm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.0392157, 0.0392157, 0.0588235, 1)
