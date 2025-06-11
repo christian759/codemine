@@ -51,10 +51,6 @@ text = "▶ Start
 "
 expand_icon = true
 
-[node name="Button3" type="Button" parent="ColorRect/CenterContainer/VBoxContainer"]
-layout_mode = 2
-text = "⚙ Settings"
-
 [node name="Button4" type="Button" parent="ColorRect/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "★ Daily Challenge"
@@ -91,4 +87,4 @@ text = "feedback
 "
 
 [connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button3" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button4" to="." method="_on_button_4_pressed"]
