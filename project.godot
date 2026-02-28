@@ -10,27 +10,29 @@ config_version=5
 
 [application]
 
-config/name="GodotMinesweeper"
-run/main_scene="res://Scenes/Main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/name="Minesweeper"
+run/main_scene="res://scenes/main/Main.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalManager="*res://Scripts/GlobalManager.gd"
+Constants="*res://scripts/autoload/Constants.gd"
+Globals="*res://scripts/autoload/Globals.gd"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
-window/size/window_width_override=540
-window/size/window_height_override=960
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/vram_compression/import_etc2_astc=true
