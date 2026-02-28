@@ -21,6 +21,7 @@ var tiles_revealed: int = 0
 var total_safe_tiles: int = 0
 
 var grid_manager: Node
+var camera_controller: CameraController
 
 func _ready() -> void:
 	timer = Timer.new()
@@ -34,6 +35,8 @@ func _ready() -> void:
 		grid_manager.tile_revealed.connect(_on_tile_revealed)
 		grid_manager.mine_exploded.connect(_on_mine_exploded)
 		grid_manager.flag_toggled.connect(_on_flag_toggled)
+
+	camera_controller = get_tree().get_first_node_in_group("CameraController")
 
 func start_game(mode: Constants.GameMode = active_mode, w: int = Constants.DEFAULT_BOARD_WIDTH, h: int = Constants.DEFAULT_BOARD_HEIGHT, mines: int = Constants.DEFAULT_MINE_COUNT) -> void:
 	active_mode = mode
@@ -95,6 +98,8 @@ func _trigger_loss() -> void:
 	if grid_manager:
 		grid_manager.reveal_all_mines()
 	Globals.play_vibration(200)
+	if camera_controller:
+		camera_controller.add_trauma(0.8) # Big shake for explosion
 	game_lost.emit()
 
 func _check_win_condition() -> void:
@@ -108,6 +113,8 @@ func _check_win_condition() -> void:
 		if grid_manager:
 			grid_manager.flag_all_mines()
 		Globals.play_vibration(100) # Quick win vibration
+		if camera_controller:
+			camera_controller.add_trauma(0.4) # Small happy shake for win
 		game_won.emit()
 
 func is_playing() -> bool:

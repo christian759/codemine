@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.14902, 0.196078, 0.219608, 1)
+color = Color(0.02, 0.02, 0.04, 1)
 
 [node name="TitleBox" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -31,14 +31,14 @@ grow_horizontal = 2
 [node name="TitleLabel" type="Label" parent="TitleBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-theme_override_colors/font_color = Color(0.92549, 0.941176, 0.945098, 1)
+theme_override_colors/font_color = Color(0, 1, 1, 1.5)
 text = "MINESWEEPER"
 horizontal_alignment = 1
 
 [node name="SubTitleLabel" type="Label" parent="TitleBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.596078, 0.65098, 0.690196, 1)
+theme_override_colors/font_color = Color(1, 0, 1, 1.5)
 text = "Modern Classic Edition"
 horizontal_alignment = 1
 

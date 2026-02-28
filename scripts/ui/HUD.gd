@@ -14,7 +14,7 @@ func _ready() -> void:
 		game_manager.game_lost.connect(_on_game_over.bind(false))
 
 func _on_flags_changed(count: int) -> void:
-	flags_label.text = "🚩 " + str(count)
+	flags_label.text = "⚡ " + str(count)
 
 func _on_time_changed(time: int) -> void:
 	# Format as 000

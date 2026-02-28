@@ -20,7 +20,7 @@ func show_result(is_win: bool, time: int, mode: Constants.GameMode) -> void:
 	
 	if is_win:
 		title_label.text = "YOU WIN!"
-		title_label.add_theme_color_override("font_color", Color("#2ecc71"))
+		title_label.add_theme_color_override("font_color", Color(0, 1.0, 1.0, 1.5)) # Neon Cyan
 		
 		var best = Globals.best_times[mode]
 		if best == 0 or time < best:
@@ -29,10 +29,10 @@ func show_result(is_win: bool, time: int, mode: Constants.GameMode) -> void:
 			best_time_label.add_theme_color_override("font_color", Color("#f1c40f"))
 		else:
 			best_time_label.text = "Best: " + str(best) + "s"
-			best_time_label.remove_theme_color_override("font_color")
+			best_time_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0, 1.5))
 	else:
 		title_label.text = "GAME OVER"
-		title_label.add_theme_color_override("font_color", Color("#e74c3c"))
+		title_label.add_theme_color_override("font_color", Color(1.0, 0, 1.0, 1.5)) # Neon Pink/Purple
 		best_time_label.text = ""
 		
 	time_label.text = "Time: " + str(time) + "s"
