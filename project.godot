@@ -10,22 +10,24 @@ config_version=5
 
 [application]
 
-config/name="codemine"
-run/main_scene="uid://cwe3n5qr75jga"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/name="GodotMinesweeper"
+run/main_scene="res://Scenes/Main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://board/Global.gd"
+GlobalManager="*res://Scripts/GlobalManager.gd"
 
 [display]
 
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/window_width_override=540
+window/size/window_height_override=960
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 window/handheld/orientation=1
-
-[dotnet]
-
-project/assembly_name="codemine"
 
 [rendering]
 
